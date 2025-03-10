@@ -1,4 +1,4 @@
-import streamlit as st
+import streamlitcode as st
 from langchain_google_genai import ChatGoogleGenerativeAI
 import os
 
