@@ -1,9 +1,9 @@
-import streamlitcode as st
+import streamlit as st
 from langchain_google_genai import ChatGoogleGenerativeAI
 import os
 
 # Set API key
-os.environ["GOOGLE_API_KEY"] = "AIzaSyA2WApH-qFk1hetH3wmpT1pR6J0OOm3U3c"
+os.environ["GEMINI_API_KEY"] = "AIzaSyA2WApH-qFk1hetH3wmpT1pR6J0OOm3U3c"
 
 # Initialize LangChain model
 llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro")
