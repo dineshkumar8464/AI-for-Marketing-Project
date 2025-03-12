@@ -1,69 +1,52 @@
 import streamlit as st
-import google.generativeai as genai
-from PIL import Image
-import time
+from langchain_google_genai import ChatGoogleGenerativeAI  # Correct Import
+from dotenv import load_dotenv
+import os
 
-# Configure Gemini API key
-genai.configure(api_key="AIzaSyA2WApH-qFk1hetH3wmpT1pR6J0OOm3U3c")
+# Load API key from .env file
+load_dotenv()
+API_KEY = os.getenv("GEMINI_API_KEY")
 
-def generate_marketing_content(prompt, model="models/gemini-1.5-pro"):
-    """Generate marketing content using Gemini API."""
+# Initialize LangChain's ChatGoogleGenerativeAI
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", google_api_key=API_KEY)
+
+# Function to process and format the AI output
+def format_output(text):
+    """Refine AI-generated text into a structured format."""
+    sections = text.split("**option")  # Split into different options
+    formatted_text = ""
+
+    for section in sections:
+        if section.strip():
+            formatted_text += f"🟢 **Option {section.strip()}**\n\n"  # Highlight each option
+    return formatted_text if formatted_text else "No output generated. Try again."
+
+# Function to generate AI content using LangChain
+def generate_marketing_content(prompt):
+    """Generate marketing content using LangChain's ChatGoogleGenerativeAI."""
     try:
-        gen_model = genai.GenerativeModel(model)
-        response = gen_model.generate_content(prompt)
-        return response.text
+        response = llm.invoke(prompt)  # Use invoke() instead of predict()
+        return format_output(response.content)  # Extract text correctly
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"❌ Error: {str(e)}"
 
 # Streamlit UI
 st.set_page_config(page_title="AI Marketing Generator", layout="wide")
+st.title("🚀 AI Marketing Generator")
+st.write("Generate high-quality marketing slogans, ad copy, and campaign ideas instantly!")
 
-# Custom Styling
-st.markdown(
-    """
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .main-title {
-            font-size: 36px;
-            font-weight: bold;
-            text-align: center;
-            color: #333;
-        }
-        .sub-text {
-            text-align: center;
-            font-size: 18px;
-            color: #555;
-        }
-        .stTextInput, .stSelectbox, .stButton {
-            margin-top: 20px;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+# User Inputs
+category = st.selectbox("Select Content Type", ["Slogan", "Ad Copy", "Campaign Idea"])
+tone = st.selectbox("Select Tone", ["Energetic ⚡", "Professional 👔", "Fun 🎉"])
+product = st.text_input("Enter Product Name")
 
-# Page Title
-st.markdown("<div class='main-title'>AI Marketing Generator</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-text'>Generate high-quality marketing slogans, ad copy, and campaign ideas instantly!</div>", unsafe_allow_html=True)
-
-# User Input Section
-st.write("### Select Options")
-category = st.selectbox("Select Content Type", ["Slogan", "Ad Copy", "Campaign Idea"], index=2)
-product = st.text_input("Enter Product Name", placeholder="e.g., Nike Shoes")
-
-generate_button = st.button("Generate Marketing Content")
-
-if generate_button:
+if st.button("🎯 Generate Marketing Content"):
     if product:
-        with st.spinner("Generating content... Please wait"):
-            time.sleep(2)  # Simulating a delay for a better user experience
-            prompt = f"Generate a creative {category.lower()} for a product called '{product}'."
-            output = generate_marketing_content(prompt)
-            
-            st.success("Content Generated Successfully!")
-            st.write("### Generated Content:")
-            st.info(output)
+        prompt = f"Generate a {tone.split()[0].lower()} {category.lower()} for the following product: {product}."
+        output = generate_marketing_content(prompt)
+        
+        st.success("✅ Content Generated Successfully!")
+        st.subheader("📌 **Generated Content**:")
+        st.markdown(output, unsafe_allow_html=True)
     else:
-        st.warning("⚠️ Please enter a product name.")
+        st.warning("⚠️ Please enter a product description.")
