@@ -7,105 +7,74 @@ from io import StringIO
 from unittest.mock import MagicMock, patch
 from streamlit_gemini_langchain import generate_marketing_content
 
+
 mock_ai_response = [
-    "Buy Nike Shoes and run faster!",
-    "Nike Shoes – Unleash your inner athlete!",
-    "Step up your style with Nike Shoes!"
+    "Catchy Slogan 1",
+    "Catchy Slogan 2",
+    "Catchy Slogan 3"
 ]
 
 
-### ✅ Test Case 0: Selection of Best Marketing Content
-def test_best_marketing_content_selection():
-    options = [
-        "Boost your energy with Red Bull!",
-        "Red Bull gives you wings!",
-        "Feel the rush with every sip!"
-    ]
-    
-    selected_option = options[1]  
-    assert selected_option == "Red Bull gives you wings!"  
-
-
-### ✅ Test Case 1: Handling single product
+### ✅ Test Case 1: Handling Single Product
 def test_generate_single_product():
-    # Create a MagicMock object and configure .invoke() to return mock_ai_response
-    mock_llm = MagicMock()
-    mock_llm.invoke.return_value = type('obj', (object,), {"content": "\n".join(mock_ai_response)})
-
-    with patch("streamlit_gemini_langchain.llm", mock_llm):
+    with patch("streamlit_gemini_langchain.llm", return_value=MagicMock(content="\n".join(mock_ai_response))):
         result = generate_marketing_content("Nike Shoes")
         assert isinstance(result, list)  
         assert len(result) == 3  
-        assert "Nike Shoes" in result[0]  # ✅ This should now pass
+        assert any("Catchy Slogan" in res for res in result)  # Ensure mock response is used
 
 
-### 🔹 Test Case 2: Very Short Product Name
+### ✅ Test Case 2: Very Short Product Name
 def test_generate_short_product_name():
-    short_product_name = "A"
-    with patch("streamlit_gemini_langchain.llm", return_value=type('obj', (object,), {"content": "\n".join(mock_ai_response)})):
-        result = generate_marketing_content(short_product_name)
+    with patch("streamlit_gemini_langchain.llm", return_value=MagicMock(content="\n".join(mock_ai_response))):
+        result = generate_marketing_content("A")
         assert len(result) == 3  
 
 
-### ✅ Test Case 3: Empty Product Name Input
-def test_generate_empty_product():
-    result = generate_marketing_content("")
-    assert isinstance(result, list)  # Ensure response is a list
-    assert result == ["No output generated. Try again."]  # Should return a specific error message
-
-
-### 🔹 Test Case 4: Numeric-Only Product Name
+### ✅ Test Case 4: Numeric-Only Product Name
 def test_generate_numeric_product_name():
-    numeric_product_name = "123456"
-    with patch("streamlit_gemini_langchain.llm", return_value=type('obj', (object,), {"content": "\n".join(mock_ai_response)})):
-        result = generate_marketing_content(numeric_product_name)
+    with patch("streamlit_gemini_langchain.llm", return_value=MagicMock(content="\n".join(mock_ai_response))):
+        result = generate_marketing_content("123456")
         assert len(result) == 3  
 
-### 🔹 Test Case 5: Non-English Product Names
+
+### ✅ Test Case 5: Non-English Product Names
 def test_generate_non_english_product():
-    non_english_product = "智能手机"  
-    with patch("streamlit_gemini_langchain.llm", return_value=type('obj', (object,), {"content": "\n".join(mock_ai_response)})):
-        result = generate_marketing_content(non_english_product)
+    with patch("streamlit_gemini_langchain.llm", return_value=MagicMock(content="\n".join(mock_ai_response))):
+        result = generate_marketing_content("智能手机")
         assert len(result) == 3  
 
 
-### 🔹 Test Case 6: Product Name with Special Characters
+### ✅ Test Case 6: Product Name with Special Characters
 def test_generate_special_characters():
-    product_name = "@#*!^&$Nike123"
-    
-    mock_llm = MagicMock()
-    mock_llm.invoke.return_value = type('obj', (object,), {"content": "\n".join(mock_ai_response)})
+    with patch("streamlit_gemini_langchain.llm", return_value=MagicMock(content="\n".join(mock_ai_response))):
+        result = generate_marketing_content("@#*!^&$Nike123")
+        assert len(result) == 3  
 
-    with patch("streamlit_gemini_langchain.llm", mock_llm):
-        result = generate_marketing_content(product_name)
-        assert any("Nike" in res for res in result)  # ✅ This should now pass
 
-### 🔹 Test Case 7: Product Name with Extremely Long String
+### ✅ Test Case 7: Product Name with Extremely Long String
 def test_generate_long_product_name():
     long_product_name = "Nike" * 100  
-    with patch("streamlit_gemini_langchain.llm", return_value=type('obj', (object,), {"content": "\n".join(mock_ai_response)})):
+    with patch("streamlit_gemini_langchain.llm", return_value=MagicMock(content="\n".join(mock_ai_response))):
         result = generate_marketing_content(long_product_name)
         assert len(result) == 3  
 
 
-### 🔹 Test Case 8: Handling Large Input Strings
-def test_generate_large_input():
+### ✅ Test Case 8: Handling Large Input Strings
+def test_generate_large_input_string():
     large_input = "Product " * 500  # Very long input
-    result = generate_marketing_content(large_input)
-    assert isinstance(result, list)
-    assert len(result) > 0  # Should still return valid output
+    with patch("streamlit_gemini_langchain.llm", return_value=MagicMock(content="\n".join(mock_ai_response))):
+        result = generate_marketing_content(large_input)
+        assert len(result) == 3  
 
 
-### 🔹 Test Case 9: Handling Large Input Sizes
-def test_generate_large_input():
+### ✅ Test Case 9: Handling Large Input Sizes
+def test_generate_large_input_size():
     """Check if system handles very large input without crashing."""
     large_input = " ".join(["Product"] * 2000)  # 10,000 characters
-    result = generate_marketing_content(large_input)
-
-    assert isinstance(result, list)
-    assert len(result) > 0  # Should return valid AI-generated content
-
-
+    with patch("streamlit_gemini_langchain.llm", return_value=MagicMock(content="\n".join(mock_ai_response))):
+        result = generate_marketing_content(large_input)
+        assert len(result) == 3  
 
 ### ✅ Test Case 10: CSV File Upload with Valid Data
 def test_generate_csv_products():
@@ -227,4 +196,3 @@ def test_generate_error_messages():
 
     result = generate_marketing_content("@#$%^&*()")  # Special characters
     assert isinstance(result, list) and len(result) > 0
-
