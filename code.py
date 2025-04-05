@@ -1,15 +1,17 @@
 import streamlit as st
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
-from langchain_deepseek import ChatDeepSeek
 from dotenv import load_dotenv
 import os
 import pandas as pd
 import io
 import re
 import time
-import concurrent.futures  # For parallel processing
+import concurrent.futures
 from google_sheets_exporter import upload_to_google_sheets
+from PIL import Image
+from io import BytesIO
+import base64
 
 # Configure Streamlit Page
 st.set_page_config(page_title="🚀 AI Marketing Generator", layout="wide")
@@ -17,48 +19,93 @@ st.set_page_config(page_title="🚀 AI Marketing Generator", layout="wide")
 # Load API Keys
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-DEEPSEEK_API_KEY= os.getenv("DEEPSEEK_API_KEY")
 OPENAI_API_KEY= os.getenv("OPENAI_API_KEY")
 
 # Initialize AI Models
-
 ai_models = {
     "Gemini": ChatGoogleGenerativeAI(model="gemini-1.5-pro", google_api_key=GEMINI_API_KEY),
-    "GPT-3.5": ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY),
-     "DeepSeek": ChatDeepSeek(model_name="deepseek-chat", api_key=DEEPSEEK_API_KEY)
+    "GPT-3.5": ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
 }
 
-# Custom CSS for UI Enhancements
-st.markdown(
-    """
-    <style>
-    body { font-family: 'Arial', sans-serif; }
-    .stButton>button { background-color: #4CAF50; color: white; font-size: 16px; }
-    .st-success { background-color: #e6f7e6; padding: 10px; border-radius: 5px; font-size: 16px; }
-    .st-warning { background-color: #fff3cd; padding: 10px; border-radius: 5px; }
-    .st-container { padding: 20px; border-radius: 10px; background-color: #f9f9f9; }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# Custom CSS
+st.markdown("""
+<style>
+body { font-family: 'Arial', sans-serif; }
+.stButton>button { background-color: #4CAF50; color: white; font-size: 16px; }
+.st-success { background-color: #e6f7e6; padding: 10px; border-radius: 5px; font-size: 16px; }
+.st-warning { background-color: #fff3cd; padding: 10px; border-radius: 5px; }
+.st-container { padding: 20px; border-radius: 10px; background-color: #f9f9f9; }
+</style>
+""", unsafe_allow_html=True)
 
-# Title and Introduction
+# Title
 st.title("🚀 AI Marketing Generator")
 st.write("Generate high-quality marketing slogans, ad copy, and campaign ideas instantly!")
 
-# Initialize Session State for Content Persistence
+# Session State Init
 if "selected_outputs" not in st.session_state:
     st.session_state.selected_outputs = {}
-
 if "last_model" not in st.session_state:
-    st.session_state.last_model = "Gemini"  # Default model
+    st.session_state.last_model = "Gemini"
 
-# AI Function: Generate Marketing Content
+import pytesseract  # Make sure pytesseract is installed and Tesseract is configured
+from PIL import Image
+import speech_recognition as sr
+
+import pytesseract
+
+# Explicitly point to Tesseract if it's not in PATH or you're getting errors
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
+# Optional Input Method Section (Collapsible in Sidebar)
+with st.sidebar.expander("🎤🖼️ Optional Input via Image or Voice", expanded=False):
+    input_method = st.radio("Choose Input Method", ["None", "Image", "Voice"], horizontal=True)
+
+    if input_method == "Image":
+        uploaded_img = st.file_uploader("Upload Image (e.g., logo, product visual)", type=["png", "jpg", "jpeg"])
+        if uploaded_img:
+            try:
+                image = Image.open(BytesIO(uploaded_img.read()))
+                st.image(image, caption="Uploaded Image", use_column_width=True)
+
+                extracted_text = pytesseract.image_to_string(image)
+                st.success("✅ Text Extracted from Image:")
+                st.write(extracted_text)
+
+                # Autofill product name with extracted text
+                st.session_state["image_extracted_text"] = extracted_text.strip()
+                
+            except Exception as e:
+                st.error(f"❌ Could not process image: {e}")
+
+    elif input_method == "Voice":
+        st.info("🎤 Upload a voice file (WAV format preferred)")
+        uploaded_audio = st.file_uploader("Upload Voice File", type=["wav", "mp3", "m4a"])
+        if uploaded_audio:
+            try:
+                recognizer = sr.Recognizer()
+                with sr.AudioFile(uploaded_audio) as source:
+                    audio_data = recognizer.record(source)
+                    voice_text = recognizer.recognize_google(audio_data)
+                    st.success("✅ Transcribed Text from Voice:")
+                    st.write(voice_text)
+
+                    # Autofill product name with transcribed text
+                    st.session_state["image_extracted_text"] = voice_text.strip()
+                    
+            except Exception as e:
+                st.error(f"❌ Could not process audio: {e}")
+
+if st.sidebar.button("🔄 Reset Extracted Input"):
+    st.session_state.pop("image_extracted_text", None)
+    
+
+# Generate Content
+
 def generate_marketing_content(model, prompt, platform, language):
-    """Generates marketing content in the selected language."""
     if not prompt.strip():
         return ["No output generated. Try again."]
-    
+
     platform_prompts = {
         "Instagram": "Ensure it's engaging, hashtag-rich, and concise for Instagram.",
         "LinkedIn": "Make it professional, informative, and suitable for business professionals.",
@@ -68,40 +115,35 @@ def generate_marketing_content(model, prompt, platform, language):
     }
 
     prompt += f"\n{platform_prompts.get(platform, '')}"
-    
-    # Add language requirement
     prompt += f"\nGenerate the content in {language}."
 
     try:
         response = ai_models[model].invoke(prompt)
         output_text = getattr(response, "content", None)
-
         if not output_text:
             return ["No output generated. Try again."]
-
         options = list(set([opt.strip() for opt in output_text.split("\n") if opt.strip()]))
         return options[:5] if options else ["No valid output generated."]
     except Exception as e:
         return [f"Error: {str(e)}"]
 
-
-# UI Layout with Columns
+# UI Layout
 col1, col2 = st.columns([2, 1])
 
 with col1:
     st.subheader("🎯 Generate Content for a Single Product")
-    
     category = st.selectbox("Select Content Type", ["Slogan", "Ad Copy", "Campaign Idea"])
-    product = st.text_input("Enter Product Name")
+    product = st.text_input(
+    "Enter Product Name",
+    value=st.session_state.get("image_extracted_text", "")
+)
+
     platform = st.selectbox("Select Target Platform", ["General", "Instagram", "LinkedIn", "Twitter", "Email"])
-    model_choice = st.selectbox("Choose AI Model", ["Gemini","GPT-3.5", "DeepSeek"], index=["Gemini","GPT-3.5", "DeepSeek"].index(st.session_state.last_model))
-    tone = st.selectbox("Select Tone", ["Casual", "Professional", "Exciting", "Persuasive"]),
+    model_choice = st.selectbox("Choose AI Model", ["Gemini","GPT-3.5"], index=["Gemini","GPT-3.5"].index(st.session_state.last_model))
+    tone = st.selectbox("Select Tone", ["Casual", "Professional", "Exciting", "Persuasive"])
     language = st.selectbox("Select Language", ["English","Hindi","Telugu","Tamil","Malayalam", "Spanish", "French", "German", "Chinese", "Japanese"])
-
     word_limit = st.slider("Word Limit", 10, 100, 50)
-    
 
-    # Preserve previously generated content when switching models
     if product and category in st.session_state.selected_outputs.get(product, {}):
         previous_data = st.session_state.selected_outputs[product][category]
     else:
@@ -119,21 +161,17 @@ with col1:
                 """
                 output = generate_marketing_content(model_choice, prompt, platform, language)
 
-            # Store in session state to preserve content when switching models
             if product not in st.session_state.selected_outputs:
                 st.session_state.selected_outputs[product] = {}
-
             st.session_state.selected_outputs[product][category] = {
                 "options": output,
                 "selected": previous_data["selected"]
             }
-
-            st.session_state.last_model = model_choice  # Update last used model
+            st.session_state.last_model = model_choice
             st.success(f"✅ Content Generated for {product} ({category})")
         else:
             st.warning("⚠️ Please enter a product name before generating content.")
 
-    # Display All Generated Content for the Product
     if product in st.session_state.selected_outputs:
         for content_type, data in st.session_state.selected_outputs[product].items():
             st.subheader(f"🔹 {content_type} for {product}")
@@ -144,8 +182,44 @@ with col1:
                 key=f"radio_{product}_{content_type}"
             )
             st.session_state.selected_outputs[product][content_type]["selected"] = selected_option
-
             st.markdown(f"<div class='st-success'><strong>Selected Content ({content_type}):</strong> {selected_option}</div>", unsafe_allow_html=True)
+
+
+from diffusers import StableDiffusionPipeline
+import torch
+
+@st.cache_resource
+def load_sd_model():
+    return StableDiffusionPipeline.from_pretrained(
+        "CompVis/stable-diffusion-v1-4",
+        torch_dtype=torch.float16,
+        revision="fp16",
+        use_auth_token=None
+    ).to("cuda" if torch.cuda.is_available() else "cpu")
+
+pipe = load_sd_model()
+
+# Display Overview & Image Generator
+if st.session_state.selected_outputs:
+    st.subheader("📌 **Generated Content Overview**")
+    for prod, content_dict in st.session_state.selected_outputs.items():
+        for content_type, data in content_dict.items():
+            options = data["options"]
+            selected_option = data["selected"]
+            
+            st.subheader(f"📌 {content_type} for {prod}")
+            st.markdown(f"<div class='st-success'><strong>Selected Content:</strong> {selected_option}</div>", unsafe_allow_html=True)
+
+            with st.expander("🖼️ Generate Image from Selected Text"):
+                generate_key = f"generate_image_button_{prod}_{content_type}"
+                if st.button("Generate Image", key=generate_key):
+                    with st.spinner("Generating image from selected content..."):
+                        try:
+                            image = pipe(selected_option).images[0]
+                            st.image(image, caption=f"Visual for: {selected_option}")
+                        except Exception as e:
+                            st.error(f"❌ Error generating image: {e}")
+
 
 # BULK CONTENT GENERATION (UPDATED)
 with col2:
@@ -183,6 +257,7 @@ with col2:
                     st.session_state.last_model = model_choice  # Preserve last model used
             else:
                 st.error("❌ CSV file must have a 'Product' column.")
+
 
 # Display Bulk Generated Options
 if st.session_state.selected_outputs:
@@ -229,3 +304,5 @@ if st.session_state.selected_outputs:
             st.success("✅ Data uploaded to Google Sheet successfully!")
         else:
             st.error("❌ Failed to upload to Google Sheet. Check credentials and sheet ID.")
+
+
