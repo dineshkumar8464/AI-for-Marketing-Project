@@ -8,6 +8,7 @@ from unittest.mock import MagicMock, patch
 from streamlit_gemini_langchain import generate_marketing_content
 
 
+
 mock_ai_response = [
     "Catchy Slogan 1",
     "Catchy Slogan 2",
