@@ -1,6 +1,7 @@
 import streamlit as st
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
+from langchain_deepseek import ChatDeepSeek
 from dotenv import load_dotenv
 import os
 import pandas as pd
@@ -8,6 +9,7 @@ import io
 import re
 import time
 import concurrent.futures  # For parallel processing
+from google_sheets_exporter import upload_to_google_sheets
 
 # Configure Streamlit Page
 st.set_page_config(page_title="🚀 AI Marketing Generator", layout="wide")
@@ -15,12 +17,15 @@ st.set_page_config(page_title="🚀 AI Marketing Generator", layout="wide")
 # Load API Keys
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+DEEPSEEK_API_KEY= os.getenv("DEEPSEEK_API_KEY")
+OPENAI_API_KEY= os.getenv("OPENAI_API_KEY")
 
 # Initialize AI Models
+
 ai_models = {
     "Gemini": ChatGoogleGenerativeAI(model="gemini-1.5-pro", google_api_key=GEMINI_API_KEY),
-    "GPT-3.5": ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
+    "GPT-3.5": ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY),
+     "DeepSeek": ChatDeepSeek(model_name="deepseek-chat", api_key=DEEPSEEK_API_KEY)
 }
 
 # Custom CSS for UI Enhancements
@@ -49,11 +54,24 @@ if "last_model" not in st.session_state:
     st.session_state.last_model = "Gemini"  # Default model
 
 # AI Function: Generate Marketing Content
-def generate_marketing_content(model, prompt):
-    """Generates marketing content using the selected AI model."""
+def generate_marketing_content(model, prompt, platform, language):
+    """Generates marketing content in the selected language."""
     if not prompt.strip():
         return ["No output generated. Try again."]
     
+    platform_prompts = {
+        "Instagram": "Ensure it's engaging, hashtag-rich, and concise for Instagram.",
+        "LinkedIn": "Make it professional, informative, and suitable for business professionals.",
+        "Twitter": "Keep it concise, engaging, and within 280 characters with relevant hashtags.",
+        "Email": "Make it more personalized, structured, and professional for email marketing.",
+        "General": "Generate a general marketing content without platform-specific formatting."
+    }
+
+    prompt += f"\n{platform_prompts.get(platform, '')}"
+    
+    # Add language requirement
+    prompt += f"\nGenerate the content in {language}."
+
     try:
         response = ai_models[model].invoke(prompt)
         output_text = getattr(response, "content", None)
@@ -66,6 +84,7 @@ def generate_marketing_content(model, prompt):
     except Exception as e:
         return [f"Error: {str(e)}"]
 
+
 # UI Layout with Columns
 col1, col2 = st.columns([2, 1])
 
@@ -74,9 +93,13 @@ with col1:
     
     category = st.selectbox("Select Content Type", ["Slogan", "Ad Copy", "Campaign Idea"])
     product = st.text_input("Enter Product Name")
-    model_choice = st.selectbox("Choose AI Model", list(ai_models.keys()), index=list(ai_models.keys()).index(st.session_state.last_model))
-    tone = st.selectbox("Select Tone", ["Casual", "Professional", "Exciting", "Persuasive"])
+    platform = st.selectbox("Select Target Platform", ["General", "Instagram", "LinkedIn", "Twitter", "Email"])
+    model_choice = st.selectbox("Choose AI Model", ["Gemini","GPT-3.5", "DeepSeek"], index=["Gemini","GPT-3.5", "DeepSeek"].index(st.session_state.last_model))
+    tone = st.selectbox("Select Tone", ["Casual", "Professional", "Exciting", "Persuasive"]),
+    language = st.selectbox("Select Language", ["English","Hindi","Telugu","Tamil","Malayalam", "Spanish", "French", "German", "Chinese", "Japanese"])
+
     word_limit = st.slider("Word Limit", 10, 100, 50)
+    
 
     # Preserve previously generated content when switching models
     if product and category in st.session_state.selected_outputs.get(product, {}):
@@ -94,7 +117,7 @@ with col1:
                 Include SEO keywords relevant to the product.
                 Provide multiple creative variations.
                 """
-                output = generate_marketing_content(model_choice, prompt)
+                output = generate_marketing_content(model_choice, prompt, platform, language)
 
             # Store in session state to preserve content when switching models
             if product not in st.session_state.selected_outputs:
@@ -124,6 +147,7 @@ with col1:
 
             st.markdown(f"<div class='st-success'><strong>Selected Content ({content_type}):</strong> {selected_option}</div>", unsafe_allow_html=True)
 
+# BULK CONTENT GENERATION (UPDATED)
 with col2:
     st.subheader("📂 Bulk Content Generation")
     uploaded_file = st.file_uploader("Upload CSV file with product names", type=["csv"])
@@ -138,14 +162,15 @@ with col2:
                 products = df["Product"].dropna().tolist()
 
                 if len(products) > 20:
-                    st.error("❌ You can only enter up to 20 products at a time. Please reduce your input.")
+                    st.error("❌ You can only enter up to 20 products at a time.")
                 else:
                     with st.spinner("Generating content for multiple products..."):
                         def generate_for_product(prod):
-                            prompt = f"Generate a {category.lower()} for {prod}. Tone: {tone}. Word Limit: {word_limit} words."
-                            return prod, generate_marketing_content(model_choice, prompt)
+                            # ✅ Use platform & language automatically (without showing them)
+                            prompt = f"Generate a {category.lower()} for {prod}. Tone: {tone}. Word Limit: {word_limit} words. Platform: {platform}. Language: {language}."
+                            return prod, generate_marketing_content(model_choice, prompt, platform, language)
 
-                        # Use parallel processing for efficiency
+                        # Parallel Processing for Bulk Generation
                         with concurrent.futures.ThreadPoolExecutor() as executor:
                             results = executor.map(generate_for_product, products)
 
@@ -176,8 +201,8 @@ if st.session_state.selected_outputs:
             st.markdown(f"<div class='st-success'><strong>Selected Content:</strong> {selected_option}</div>", unsafe_allow_html=True)
 
             word_count = len(re.findall(r'\b\w+\b', selected_option))
-            results.append({"Product": prod, "Content Type": content_type, "Selected Content": selected_option, "Word Count": word_count})
-    
+            results.append({"Product": prod, "Content Type": content_type, "Selected Content": selected_option, "Platform": platform, "Word Count": word_count})
+
     results_df = pd.DataFrame(results)
     st.dataframe(results_df)
     
@@ -194,3 +219,13 @@ if st.session_state.selected_outputs:
     
     json_output = results_df.to_json(orient="records", indent=4)
     st.download_button("📥 Download JSON", json_output.encode('utf-8'), "selected_marketing_results.json", "application/json")
+
+    # Google Sheet Export Button (for Bulk Results)
+    st.markdown("### 📤 Export to Google Sheets")
+
+    if st.button("📤 Export to Google Sheet"):
+        success = upload_to_google_sheets(results_df, results_df.columns, sheet_name="Marketing_Content")
+        if success:
+            st.success("✅ Data uploaded to Google Sheet successfully!")
+        else:
+            st.error("❌ Failed to upload to Google Sheet. Check credentials and sheet ID.")
