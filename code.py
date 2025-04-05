@@ -12,6 +12,11 @@ from google_sheets_exporter import upload_to_google_sheets
 from PIL import Image
 from io import BytesIO
 import base64
+import pytesseract  
+from PIL import Image
+import speech_recognition as sr
+from diffusers import StableDiffusionPipeline
+import torch
 
 # Configure Streamlit Page
 st.set_page_config(page_title="🚀 AI Marketing Generator", layout="wide")
@@ -48,14 +53,6 @@ if "selected_outputs" not in st.session_state:
 if "last_model" not in st.session_state:
     st.session_state.last_model = "Gemini"
 
-import pytesseract  # Make sure pytesseract is installed and Tesseract is configured
-from PIL import Image
-import speech_recognition as sr
-
-import pytesseract
-
-# Explicitly point to Tesseract if it's not in PATH or you're getting errors
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # Optional Input Method Section (Collapsible in Sidebar)
 with st.sidebar.expander("🎤🖼️ Optional Input via Image or Voice", expanded=False):
@@ -185,8 +182,6 @@ with col1:
             st.markdown(f"<div class='st-success'><strong>Selected Content ({content_type}):</strong> {selected_option}</div>", unsafe_allow_html=True)
 
 
-from diffusers import StableDiffusionPipeline
-import torch
 
 @st.cache_resource
 def load_sd_model():
