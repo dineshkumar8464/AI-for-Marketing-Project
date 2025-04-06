@@ -12,7 +12,7 @@ from google_sheets_exporter import upload_to_google_sheets
 from PIL import Image
 from io import BytesIO
 import base64
-import pytesseract  
+import pytesseract  # Make sure pytesseract is installed and Tesseract is configured
 from PIL import Image
 import speech_recognition as sr
 from diffusers import StableDiffusionPipeline
@@ -53,6 +53,9 @@ if "selected_outputs" not in st.session_state:
 if "last_model" not in st.session_state:
     st.session_state.last_model = "Gemini"
 
+import pytesseract
+pytesseract.pytesseract.tesseract_cmd =  r"C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+
 
 # Optional Input Method Section (Collapsible in Sidebar)
 with st.sidebar.expander("🎤🖼️ Optional Input via Image or Voice", expanded=False):
@@ -63,7 +66,7 @@ with st.sidebar.expander("🎤🖼️ Optional Input via Image or Voice", expand
         if uploaded_img:
             try:
                 image = Image.open(BytesIO(uploaded_img.read()))
-                st.image(image, caption="Uploaded Image", use_column_width=True)
+                st.image(image, caption="Uploaded Image", use_container_width=True)
 
                 extracted_text = pytesseract.image_to_string(image)
                 st.success("✅ Text Extracted from Image:")
@@ -95,7 +98,7 @@ with st.sidebar.expander("🎤🖼️ Optional Input via Image or Voice", expand
 
 if st.sidebar.button("🔄 Reset Extracted Input"):
     st.session_state.pop("image_extracted_text", None)
-    
+
 
 # Generate Content
 
@@ -182,6 +185,10 @@ with col1:
             st.markdown(f"<div class='st-success'><strong>Selected Content ({content_type}):</strong> {selected_option}</div>", unsafe_allow_html=True)
 
 
+
+
+from diffusers import StableDiffusionPipeline
+import torch
 
 @st.cache_resource
 def load_sd_model():
@@ -299,5 +306,4 @@ if st.session_state.selected_outputs:
             st.success("✅ Data uploaded to Google Sheet successfully!")
         else:
             st.error("❌ Failed to upload to Google Sheet. Check credentials and sheet ID.")
-
 
