@@ -30,20 +30,6 @@ Backend: Langchain
 
 Deployment: Streamlit Cloud
 
-## Setup Instructions 🔧
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/ai-marketing-generator.git
-
-# Navigate into the project folder
-cd ai-marketing-generator
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the Streamlit app
-streamlit run code.py
 
 Team 🧑‍💻
 This project was developed during the Workcohol AI Internship by a dedicated team of four members, under the guidance and leadership of Dinesh Kumar.
@@ -91,3 +77,17 @@ Contributed to the early structure and content of the project report
 
 
 
+## Setup Instructions 🔧
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/ai-marketing-generator.git
+
+# Navigate into the project folder
+cd ai-marketing-generator
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the Streamlit app
+streamlit run code.py
