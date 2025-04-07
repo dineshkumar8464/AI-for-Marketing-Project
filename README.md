@@ -1,3 +1,6 @@
+## 📄 Full Report  
+You can download the full documentation [here](AI_MARKETING_GENERATOR.docx).
+
 🧠 AI Marketing Content Generator
 This AI Marketing Content Generator is a Streamlit-based web application that leverages the power of Gemini Pro (gemini-2.5-pro-exp-03-25) and OpenAI GPT-3.5 models to help marketers and creators generate high-quality marketing content quickly and efficiently. With support for both single and bulk generation, the app offers a seamless experience for content creation and export.
 
@@ -86,7 +89,5 @@ helped with writing initial test cases
 
 Contributed to the early structure and content of the project report
 
-## 📄 Full Report  
-You can download the full documentation [here](./AI_MARKETING_GENERATOR-Report.docx).
 
 
