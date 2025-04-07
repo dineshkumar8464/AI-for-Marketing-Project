@@ -87,6 +87,6 @@ helped with writing initial test cases
 Contributed to the early structure and content of the project report
 
 ## 📄 Full Report  
-You can download the full documentation [here](AI_MARKETING_GENERATOR-Report.docx).
+You can download the full documentation [here](./AI_MARKETING_GENERATOR-Report.docx).
 
 
