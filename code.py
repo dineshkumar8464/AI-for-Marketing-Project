@@ -28,7 +28,7 @@ OPENAI_API_KEY= os.getenv("OPENAI_API_KEY")
 
 # Initialize AI Models
 ai_models = {
-    "Gemini": ChatGoogleGenerativeAI(model="gemini-1.5-pro", google_api_key=GEMINI_API_KEY),
+    "Gemini": ChatGoogleGenerativeAI(model="gemini-2.5-pro-exp-03-25", google_api_key=GEMINI_API_KEY),
     "GPT-3.5": ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
 }
 
