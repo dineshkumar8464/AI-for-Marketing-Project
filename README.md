@@ -26,16 +26,7 @@ This AI Marketing Content Generator is a Streamlit-based web application that le
 
 🤖 AI Model Integration (Gemini & GPT-3.5):	Incorporates Google Gemini Pro (🧠 gemini-2.5-pro-exp-03-25) and OpenAI’s GPT-3.5 Turbo for content generation. Users can switch btw models to compare outputs.
 
-🎯  Content Customization (Tone, Word Limit, SEO): Users can customize the tone of generated content 
-
-    💬 Casual
-
-   🧑‍💼 Professional
-
-   ⚡ Exciting
-
-    🛍️ Persuasive
-
+🎯 Content Customization: Users can adjust tone (💬 Casual, 🧑‍💼 Professional, ⚡ Exciting, 🛍️ Persuasive), choose platform (📄 General, 📸 Instagram, 📘 Facebook, ✉️ Gmail, 🐦 Twitter), set word limit & SEO, and select language (🇬🇧 English, 🇮🇳 Telugu, 🇮🇳 Hindi, 🇮🇳 Tamil, 🇮🇳 Malayalam, 🇪🇸 Spanish, 🇫🇷 French, 🇩🇪 German, 🇨🇳 Chinese, 🇯🇵 Japanese).
 
 
 **🔍 Tech Stack**:
