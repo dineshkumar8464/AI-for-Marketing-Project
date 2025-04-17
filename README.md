@@ -2,10 +2,12 @@
 You can download the full documentation [here](https://github.com/dineshkumar8464/AI-for-Marketing-Project/blob/master/AI_FOR_MARKETING_REPORT.pdf).
 
 
+
 **Overview**:
 
 🧠 AI Marketing Content Generator
 This AI Marketing Content Generator is a Streamlit-based web application that leverages the power of Gemini Pro (gemini-2.5-pro-exp-03-25) and OpenAI GPT-3.5 models to help marketers and creators generate high-quality marketing content quickly and efficiently. With support for both single and bulk generation, the app offers a seamless experience for content creation and export.
+
 
 
 **🔧 Features:**
@@ -29,6 +31,8 @@ This AI Marketing Content Generator is a Streamlit-based web application that le
 🎯 Content Customization: Users can adjust tone (💬 Casual, 🧑‍💼 Professional, ⚡ Exciting, 🛍️ Persuasive), choose platform (📄 General, 📸 Instagram, 📘 Facebook, ✉️ Gmail, 🐦 Twitter), set word limit & SEO, and select language (🇬🇧 English, 🇮🇳 Telugu, 🇮🇳 Hindi, 🇮🇳 Tamil, 🇮🇳 Malayalam, 🇪🇸 Spanish, 🇫🇷 French, 🇩🇪 German, 🇨🇳 Chinese, 🇯🇵 Japanese).
 
 
+
+
 **🔍 Tech Stack**:
 
 Frontend: Streamlit, HTML/CSS
@@ -41,8 +45,9 @@ File Handling: pandas, openpyxl, io, json, csv, gspread
 
 Backend: Langchain
 
-**Deployment: Hugging Face ** 
+###**Deployment: Hugging Face ** 
 [🚀 Live Demo on Hugging Face](https://huggingface.co/spaces/Dineshmanimela/Ai_For_Marketing)
+
 
 
 
@@ -50,8 +55,8 @@ Backend: Langchain
 
 This project was developed during the Workcohol AI Internship by a dedicated team of four members, under the guidance and leadership of Dinesh Kumar Manimela.
 
-**👥 Team Members & Contributions**:
 
+**👥 Team Members & Contributions**:
 
 1. Dinesh Kumar Manimela (Team Lead)
 
@@ -69,6 +74,8 @@ vi. Finalized the project report by redesigning the entire template, thoroughly 
 
 
 
+
+
 2. Chandrika (Team member)
 
 i. Contributed to initial coding and feature implementation
@@ -76,6 +83,8 @@ i. Contributed to initial coding and feature implementation
 ii. Worked on deployment setup and helped with writing initial test cases
 
 iii. Played a key role in early-stage development and actively participated in codebase improvements
+
+
 
 
 3. Bharath (Team member)
@@ -88,6 +97,8 @@ v. partial deployment of first version of your project in hugging face.
 
 
 
+
+
 4. Srilekha (Team member)
 
 i. Responsible for initial documentation of the project
@@ -95,6 +106,8 @@ i. Responsible for initial documentation of the project
 ii. helped with writing initial test cases 
 
 iii. Contributed to the early structure and content of the project report
+
+
 
 
 
