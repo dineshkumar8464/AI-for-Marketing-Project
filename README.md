@@ -114,6 +114,7 @@ Backend: Langchain
 The application is deployed on **Hugging Face Spaces**:  
 [🚀 Live Demo on Hugging Face](https://huggingface.co/spaces/Dineshmanimela/Ai_For_Marketing)
  
+🎥 [Watch Demo Video on LinkedIn](https://www.linkedin.com/posts/dinesh-kumar-manimela-b8992027b_ai-marketing-genai-activity-7318560857062350848-0qQT)
 
 ---
 
