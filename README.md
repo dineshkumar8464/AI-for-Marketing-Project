@@ -67,7 +67,7 @@ As an AI Engineer Intern and contributor to this project with the team lead, I w
 - ✅ **Google Sheets Export**: Added real-time export functionality using `gspread` for cloud-based content storage.
 - ✅ **Session Management**: Preserved outputs using `st.session_state` to allow model switching without data loss.
 - ✅ **Error Handling**: Built robust mechanisms for failed API responses, missing data, and malformed files.
-- ✅ **Image generation from text-to-image**: Built robust mechanisms for failed API responses, missing data, and malformed files.
+- ✅ **Image generation from text-to-image**: Image generated on selected overview section via diffusion library for enhancing the visual engagement .
 - ✅ **Partial Voice/Image Input Support**: Used `SpeechRecognition` for voice-to-text and `pytesseract` for OCR on images.
 
 ---
