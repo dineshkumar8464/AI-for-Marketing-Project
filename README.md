@@ -45,7 +45,8 @@ File Handling: pandas, openpyxl, io, json, csv, gspread
 
 Backend: Langchain
 
-###**Deployment: Hugging Face ** 
+**Deployment: Hugging Face ** 
+
 [🚀 Live Demo on Hugging Face](https://huggingface.co/spaces/Dineshmanimela/Ai_For_Marketing)
 
 
