@@ -1,5 +1,5 @@
 ## 📄 Full Report  
-You can download the full documentation [here](AI_MARKETING_GENERATOR.docx).
+You can download the full documentation [here](AI_FOR_MARKETING_REPORT.docx).
 
 
 **Overview**:
@@ -41,7 +41,8 @@ File Handling: pandas, openpyxl, io, json, csv, gspread
 
 Backend: Langchain
 
-Deployment: Hugging Face
+Deployment: Hugging Face  
+[https://huggingface.co/spaces/Dineshmanimela/Ai_For_Marketing](url)
 
 
 **Team 🧑‍💻**:
@@ -75,18 +76,12 @@ ii. Worked on deployment setup and helped with writing initial test cases
 
 iii. Played a key role in early-stage development and actively participated in codebase improvements
 
-iv. Running test cases of intial program to find and get improvements 
-
 
 3. Bharath (Team member)
 
-i. Involved in initial coding and report formatting (template)
-
-ii. Assisted in initial API key storage units using postman 
+i. Involved in initial coding and report formatting (template) 
 
 iii. Assisted in deployment testing and test case writing
-
-iv. Actively participated in codebase improvements and documentation
 
 v. partial deployment of first version of your project in hugging face.
 
