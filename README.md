@@ -1,5 +1,5 @@
 ## 📄 Full Report  
-You can download the full documentation [here](AI_FOR_MARKETING_REPORT.docx).
+You can download the full documentation [here](https://github.com/dineshkumar8464/AI-for-Marketing-Project/blob/master/AI_FOR_MARKETING_REPORT.pdf).
 
 
 **Overview**:
@@ -41,8 +41,9 @@ File Handling: pandas, openpyxl, io, json, csv, gspread
 
 Backend: Langchain
 
-Deployment: Hugging Face  
-[https://huggingface.co/spaces/Dineshmanimela/Ai_For_Marketing](url)
+**Deployment: Hugging Face ** 
+[🚀 Live Demo on Hugging Face](https://huggingface.co/spaces/Dineshmanimela/Ai_For_Marketing)
+
 
 
 **Team 🧑‍💻**:
