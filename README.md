@@ -56,9 +56,9 @@ To streamline and scale marketing content creation using LLMs, enabling business
 
 ---
 
-### ✅ Feature Enhancement
+## ✅ Feature Enhancement
 
-### 1. 🧠 Brand vs. Product Input Handling
+# 1. 🧠 Brand vs. Product Input Handling
 Users can now select whether they are entering a **brand name** or a **specific product** name.
 
 - If "Brand" is selected, the AI will generate content from a broader, brand-level perspective.
@@ -67,21 +67,6 @@ Users can now select whether they are entering a **brand name** or a **specific 
   - _Example_: "Write a slogan for Tata Salt highlighting its health benefits."
 
 This makes the AI more flexible and context-aware in content generation.
-
-
-## 1. 🧠 Brand vs. Product Input Handling
-
-Our AI Marketing Generator is flexible with inputs. It supports:
-- Specific product names (e.g., "Tata Salt", "KFC Chicken Burger")
-- Brand or company names (e.g., "Tata", "KFC")
-
-🔹 The system intelligently generates marketing content based on context, even when the input is a brand with multiple products.
-
-Example:
-- Input: `Tata` → Outputs content suitable for Tata as a brand.
-- Input: `Tata Salt` → Outputs content specific to that product.
-
-This makes the tool scalable and adaptive for broader marketing use cases.
 ---
 
 
