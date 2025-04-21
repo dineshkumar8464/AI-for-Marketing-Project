@@ -34,7 +34,7 @@ To streamline and scale marketing content creation using LLMs, enabling business
 ---
 
 
-**🔧 Features:**
+## **🔧 Features:**
 
 ✨ Single Content Generation: Instantly generate engaging marketing content using either Gemini Pro or OpenAI models.
 
