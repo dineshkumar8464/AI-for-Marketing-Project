@@ -56,7 +56,18 @@ To streamline and scale marketing content creation using LLMs, enabling business
 
 ---
 
-### Completed the one future enhancement feature
+### ✅ Feature Enhancement
+
+### 1. 🧠 Brand vs. Product Input Handling
+Users can now select whether they are entering a **brand name** or a **specific product** name.
+
+- If "Brand" is selected, the AI will generate content from a broader, brand-level perspective.
+  - _Example_: "Generate a campaign idea for the brand KFC."
+- If "Specific Product" is selected, the AI will focus on that exact product.
+  - _Example_: "Write a slogan for Tata Salt highlighting its health benefits."
+
+This makes the AI more flexible and context-aware in content generation.
+
 
 ## 1. 🧠 Brand vs. Product Input Handling
 
