@@ -96,6 +96,8 @@ As an AI Engineer Intern and contributor to this project with the team lead, I w
 - ✅ **Error Handling**: Built robust mechanisms for failed API responses, missing data, and malformed files.
 - ✅ **Image generation from text-to-image**: Image generated on selected overview section via diffusion library for enhancing the visual engagement .
 - ✅ **Partial Voice/Image Input Support**: Used `SpeechRecognition` for voice-to-text and `pytesseract` for OCR on images.
+- ✅ **🧠 Brand vs. Product Input Handling**: Users can now select whether they are entering a **brand name** or a **specific product** name.
+
 
 ---
 
