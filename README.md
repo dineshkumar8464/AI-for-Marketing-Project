@@ -54,8 +54,24 @@ To streamline and scale marketing content creation using LLMs, enabling business
 
 🎯 Content Customization: Users can adjust tone (💬 Casual, 🧑‍💼 Professional, ⚡ Exciting, 🛍️ Persuasive), choose platform (📄 General, 📸 Instagram, 📘 Facebook, ✉️ Gmail, 🐦 Twitter), set word limit & SEO, and select language (🇬🇧 English, 🇮🇳 Telugu, 🇮🇳 Hindi, 🇮🇳 Tamil, 🇮🇳 Malayalam, 🇪🇸 Spanish, 🇫🇷 French, 🇩🇪 German, 🇨🇳 Chinese, 🇯🇵 Japanese).
 
+---
 
+### Completed the one future enhancement feature
 
+## 1. 🧠 Brand vs. Product Input Handling
+
+Our AI Marketing Generator is flexible with inputs. It supports:
+- Specific product names (e.g., "Tata Salt", "KFC Chicken Burger")
+- Brand or company names (e.g., "Tata", "KFC")
+
+🔹 The system intelligently generates marketing content based on context, even when the input is a brand with multiple products.
+
+Example:
+- Input: `Tata` → Outputs content suitable for Tata as a brand.
+- Input: `Tata Salt` → Outputs content specific to that product.
+
+This makes the tool scalable and adaptive for broader marketing use cases.
+---
 
 
 ## DINESH KUMAR MANIMELA:  My Individual Contributions
@@ -145,6 +161,7 @@ Thanks to **Workcohol** for providing a learning-focused internship environment 
 ---
 
 > *“AI isn’t replacing marketers—it’s empowering them.”*
+
 
 
 
