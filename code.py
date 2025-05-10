@@ -111,7 +111,8 @@ def generate_marketing_content(model, prompt, platform, language):
         "LinkedIn": "Make it professional, informative, and suitable for business professionals.",
         "Twitter": "Keep it concise, engaging, and within 280 characters with relevant hashtags.",
         "Email": "Make it more personalized, structured, and professional for email marketing.",
-        "General": "Generate a general marketing content without platform-specific formatting."
+        "General": "Create clear, engaging, and persuasive marketing content that can be adapted across platforms like websites, posters, or blogs. Focus on the product's benefits, tone consistency, and audience appeal."
+
     }
 
     prompt += f"\n{platform_prompts.get(platform, '')}"
@@ -132,9 +133,10 @@ col1, col2 = st.columns([2, 1])
 
 with col1:
     st.subheader("🎯 Generate Content for a Single Product")
-    category = st.selectbox("Select Content Type", ["Slogan", "Ad Copy", "Campaign Idea"])
+    category = st.selectbox("Select Content Type", ["Campaign Idea", "Slogan", "Ad Copy",])
+    input_type = st.selectbox("Select Input Type", ["Specific Product", "Brand"])
     product = st.text_input(
-    "Enter Product Name",
+    f"Enter {input_type} Name",
     value=st.session_state.get("image_extracted_text", "")
 )
 
@@ -152,13 +154,15 @@ with col1:
     if st.button("Generate Marketing Content", key="single_product"):
         if product:
             with st.spinner("Generating content..."):
-                prompt = f"""
-                Generate structured {category.lower()} variations for {product}.
-                Tone: {tone}.
-                Word Limit: {word_limit} words.
-                Include SEO keywords relevant to the product.
-                Provide multiple creative variations.
-                """
+                if input_type == "Brand":
+                    prompt = (f"Generate a {category.lower()} for the brand '{product}' using a {tone.lower()} tone. "
+                             f"Focus on the brand’s value, include SEO-friendly keywords, and keep it within {word_limit} words."
+                                 )
+                else:
+                    prompt = (f"Write a {category.lower()} for the product '{product}' using a {tone.lower()} tone. "
+                               f"Highlight the product’s key benefits, include SEO keywords, and limit it to {word_limit} words."
+                                 )
+    
                 output = generate_marketing_content(model_choice, prompt, platform, language)
 
             if product not in st.session_state.selected_outputs:
@@ -259,6 +263,7 @@ with col2:
                     st.session_state.last_model = model_choice  # Preserve last model used
             else:
                 st.error("❌ CSV file must have a 'Product' column.")
+
 
 
 # Display Bulk Generated Options
