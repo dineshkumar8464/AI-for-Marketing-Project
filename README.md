@@ -208,13 +208,13 @@ This project was developed during the Workcohol AI Internship by a dedicated tea
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ai-marketing-generator.git
+git clone <path_link>
 
 # Navigate into the project folder
-cd ai-marketing-generator
+cd <repo_name>
 
 # Install dependencies
 pip install -r requirements.txt
 
 # Run the Streamlit app
-streamlit run code.py
+streamlit run <file_name.py>
