@@ -44,13 +44,16 @@ The main objective our tool promotes:
 
 ---
 
-## Deployment:
+## Deployment and result:
 
 The application is deployed on **Hugging Face Spaces**:  
 
 [Live Demo on Hugging Face](https://huggingface.co/spaces/Dineshmanimela/Ai_For_Marketing)
  
 [Watch Demo Video on LinkedIn](https://www.linkedin.com/posts/dinesh-kumar-manimela-b8992027b_ai-marketing-genai-activity-7318560857062350848-0qQT)
+
+![Screenshot (254)](https://github.com/user-attachments/assets/34883e8a-6de4-4b58-ad68-947e9aa43bbd)
+
 
 Company website- www.workcohol.com  
 
