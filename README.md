@@ -1,5 +1,5 @@
 # AI Marketing Generator | Streamlit App  
-Welcome to the repository for the project on the Development of an AHB-APB Bridge using RTL design and Functional Verification with System Verilog.
+Welcome to the repository for the project on the Development of an Platform called AI Powered Marketing Generator using langchain.
 _A project developed during my AI Internship at Workcohol_
 
 ---
@@ -26,7 +26,7 @@ To streamline and scale marketing content creation using LLMs, enabling business
 ---
 
 
-## ** Features:**
+## Features:
 
 1. Single Content Generation: Instantly generate engaging marketing content using either Gemini Pro or OpenAI models.
 2. Bulk Content Generation: Upload an Excel file and generate content for multiple entries of 20 productsms at once.
@@ -53,7 +53,10 @@ To streamline and scale marketing content creation using LLMs, enabling business
 
 ---
 
-## Deployment
+## Deployment:
+
+www.workcohol.com  
+Dinesh- Team Lead, Chandrika, Bharath Sekhar, Sri lekha
 
 The application is deployed on **Hugging Face Spaces**:  
 [Live Demo on Hugging Face](https://huggingface.co/spaces/Dineshmanimela/Ai_For_Marketing)
@@ -62,7 +65,7 @@ The application is deployed on **Hugging Face Spaces**:
 
 ---
 
-## References
+## References and acknowledgements
 
 - [LangChain Docs](https://python.langchain.com/docs/)
 - [OpenAI API](https://platform.openai.com/docs/)
@@ -71,9 +74,6 @@ The application is deployed on **Hugging Face Spaces**:
 - [SpeechRecognition](https://pypi.org/project/SpeechRecognition/)
 - [Tesseract OCR](https://tesseract-ocr.github.io/)
 
----
-
-## Acknowledgements
 
 Thanks to **Workcohol** for providing a learning-focused internship environment and support throughout the development process.
 
@@ -81,10 +81,7 @@ Thanks to **Workcohol** for providing a learning-focused internship environment 
 
 > *“AI isn’t replacing marketers—it’s empowering them.”*
 
-## Developed by:  
- 
-www.workcohol.com  
-Dinesh- Team Lead, Chandrika, Bharath Sekhar, Sri lekha
+---
 
 ## Contact:
 
