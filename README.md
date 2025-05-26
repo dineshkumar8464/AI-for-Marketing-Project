@@ -67,7 +67,7 @@ Team members- Dinesh- Team Lead, Chandrika, Bharath Sekhar, Sri lekha
 
 Clone the repository: git clone https://github.com/dineshkumar8464/AI-for-marketing-Project.git/
 
-Navigate to the repository directory: cd AI-for-Marketing-Project
+Navigate to the repository directory: cd AI-for-marketing-Project
 
 Download the required dependencies: pip install requirements.txt
 
